@@ -1,8 +1,8 @@
 //
-//  AppDelegate.m
+//  ViewController.m
 //  GetOnThatBus
 //
-//  Created by Robert Figueras on 5/28/14.
+//  Created by Vik Denic on 5/28/14.
 //
 //
 
