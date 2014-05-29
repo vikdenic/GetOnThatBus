@@ -7,9 +7,11 @@
 //
 
 #import "ViewController.h"
+#import <MapKit/MapKit.h>
 
 @interface DetailViewController : ViewController
 
 @property NSDictionary *selectedBusStopDictionary;
+@property MKPointAnnotation *detailPointLocation;
 
 @end
