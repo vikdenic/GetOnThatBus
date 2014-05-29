@@ -14,10 +14,13 @@
 
 
 @interface ViewController () <MKMapViewDelegate>
+
 @property (strong, nonatomic) IBOutlet MKMapView *mapView;
+
 @property NSArray *busStopsArray;
 @property NSDictionary *selectedDictionary;
-//@property MKPinAnnotationView *pin;
+
+// Custom references subclassing MKPointAnnotation
 @property PaceAnnotation *paceAnnotation;
 @property MetraAnnotation *metraAnnotation;
 @property MKPointAnnotation *noTransferAnnotation;
@@ -32,23 +35,27 @@
     [super viewDidLoad];
     self.selectedDictionary = [[NSDictionary alloc]init];
 
+    // Accesses and deserializes API
     NSURL *url = [NSURL URLWithString:@"https://s3.amazonaws.com/mobile-makers-lib/bus.json"];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response,
-                                                                                                            NSData *data,
+                                                                                                NSData *data,
                                                                                                             NSError *connectionError) {
 
         NSDictionary *amazonDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&connectionError];
         self.busStopsArray = [amazonDictionary objectForKey:@"row"];
 
+        // Enumerates through each bus-stop's data in API
         for (NSDictionary *busDictionary in self.busStopsArray) {
+
+            // Retrieves necessary data from API for each bus stop
             NSString *latitude = [busDictionary objectForKey:@"latitude"];
             NSString *longitude = [busDictionary objectForKey:@"longitude"];
             double latConvertedToDouble = [latitude doubleValue];
             double longConvertedToDouble = [longitude doubleValue];
 
+            // Adds the appropriate custom class (which subclass PointAnnotationView) depending on the bus-stops transfer option
             NSString *transferMode = [busDictionary objectForKey:@"inter_modal"];
-
 
             if ([transferMode isEqualToString:@"Pace"])
             {
@@ -75,30 +82,30 @@
                 self.noTransferAnnotation.title = [busDictionary objectForKey:@"cta_stop_name"];
                 self.noTransferAnnotation.subtitle = [busDictionary objectForKey:@"routes"];
                 [self.mapView addAnnotation:self.noTransferAnnotation];
-
             }
         }
 
-        // Set initial zoom
+        // Zooms map to Chicago area
         CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(41.84, -87.70);
         MKCoordinateSpan span = MKCoordinateSpanMake(.3, .3);
         MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, span);
         [self.mapView setRegion:region];
     }];
-
 }
 
 
-#pragma mark - AnnotationView Delegate Methods
+#pragma mark - Delegate Methods
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
 {
 
+    // Creates pin for each custom-Annotation class reference
     MKPinAnnotationView* pin = [[MKPinAnnotationView alloc]initWithAnnotation:annotation reuseIdentifier:nil];
     pin.canShowCallout = YES;
     [pin rightCalloutAccessoryView];
     pin.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
 
+    // Sets assoicated pin image depending on type of custom annotation class (Pace, Metra, or neither)
     if ([annotation isKindOfClass:[PaceAnnotation class]]) {
         pin.image = [UIImage imageNamed:@"pace"];
     }
@@ -126,6 +133,9 @@
     }
     [self performSegueWithIdentifier:@"DetailSegue" sender:self];
 }
+
+
+#pragma mark - Segue
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {

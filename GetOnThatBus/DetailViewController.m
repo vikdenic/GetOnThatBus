@@ -17,6 +17,7 @@
 
 @implementation DetailViewController
 
+// Sets text labels with the associated bus stop's information
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -34,7 +35,6 @@
         {
             self.transfersLabel.text = @"No transfers at this location.";
         }
-
 }
 
 @end

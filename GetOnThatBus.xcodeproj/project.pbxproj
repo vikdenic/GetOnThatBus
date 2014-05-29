@@ -125,8 +125,6 @@
 		66FBD0F619365CFC0056BA99 /* GetOnThatBus */ = {
 			isa = PBXGroup;
 			children = (
-				66FBD0FF19365CFC0056BA99 /* AppDelegate.h */,
-				66FBD10019365CFC0056BA99 /* AppDelegate.m */,
 				66FBD10219365CFC0056BA99 /* Main.storyboard */,
 				931B3D2519366DE500DE5063 /* DetailViewController.h */,
 				931B3D2619366DE500DE5063 /* DetailViewController.m */,
@@ -145,6 +143,8 @@
 		66FBD0F719365CFC0056BA99 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				66FBD0FF19365CFC0056BA99 /* AppDelegate.h */,
+				66FBD10019365CFC0056BA99 /* AppDelegate.m */,
 				66FBD0F819365CFC0056BA99 /* GetOnThatBus-Info.plist */,
 				66FBD0F919365CFC0056BA99 /* InfoPlist.strings */,
 				66FBD0FC19365CFC0056BA99 /* main.m */,
